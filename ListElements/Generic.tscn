@@ -1,0 +1,173 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://fonts/JetBrainsMono-Regular.tres" type="DynamicFont" id=1]
+[ext_resource path="res://ListElements/Generic.gd" type="Script" id=2]
+
+[sub_resource type="Curve2D" id=3]
+resource_local_to_scene = true
+_data = {
+"points": PoolVector2Array( 14.0535, 0.0891237, -14.0535, -0.0891237, 2.05062, 11.9292, 14.0482, 0.109046, -14.0482, -0.109046, -13.8564, 39.1416 )
+}
+
+[sub_resource type="Curve2D" id=4]
+resource_local_to_scene = true
+_data = {
+"points": PoolVector2Array( 14.0535, 0.0891237, -14.0535, -0.0891237, 341.199, 40.4525, 14.0482, 0.109046, -14.0482, -0.109046, 327.183, 11.9203 )
+}
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.6, 0.6, 0.6, 0 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 1, 1, 1, 0.47451 )
+
+[sub_resource type="SphereMesh" id=1]
+
+[node name="Button" type="Button"]
+margin_right = 330.0
+margin_bottom = 23.0
+custom_fonts/font = ExtResource( 1 )
+toggle_mode = true
+text = "Test/Path/etc"
+align = 0
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PathLeft" type="Path2D" parent="."]
+curve = SubResource( 3 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="PathRight" type="Path2D" parent="."]
+curve = SubResource( 4 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Control" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -6.0
+margin_right = 5.0
+mouse_filter = 1
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="DotLeft" type="Control" parent="Control"]
+anchor_top = 0.5
+anchor_bottom = 0.5
+margin_left = 8.0
+margin_right = 8.0
+mouse_filter = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="Panel" parent="Control/DotLeft"]
+margin_left = -4.0
+margin_top = -4.0
+margin_right = 4.0
+margin_bottom = 4.0
+rect_rotation = 45.0
+rect_pivot_offset = Vector2( 4, 4 )
+mouse_filter = 1
+custom_styles/panel = SubResource( 2 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Control/DotLeft"]
+visible = false
+position = Vector2( 0, -0.248031 )
+scale = Vector2( 2, 2 )
+mesh = SubResource( 1 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="ButtonLeft" type="Button" parent="Control/DotLeft"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -10.0
+margin_top = -10.0
+margin_right = 12.0
+margin_bottom = 10.0
+mouse_filter = 1
+flat = true
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="DotRight" type="Control" parent="Control"]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -8.0
+margin_right = -8.0
+mouse_filter = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="Panel" parent="Control/DotRight"]
+margin_left = -4.0
+margin_top = -4.0
+margin_right = 4.0
+margin_bottom = 4.0
+rect_rotation = 45.0
+rect_pivot_offset = Vector2( 4, 4 )
+mouse_filter = 1
+custom_styles/panel = SubResource( 2 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="Control/DotRight"]
+visible = false
+position = Vector2( 0, -0.248031 )
+scale = Vector2( 2, 2 )
+mesh = SubResource( 1 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="ButtonRight" type="Button" parent="Control/DotRight"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -12.0
+margin_top = -10.0
+margin_right = 10.0
+margin_bottom = 10.0
+mouse_filter = 1
+flat = true
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="." to="." method="_on_Button_pressed"]
+[connection signal="mouse_entered" from="Control" to="." method="_on_Control_mouse_entered"]
+[connection signal="mouse_exited" from="Control" to="." method="_on_Control_mouse_exited"]
+[connection signal="button_down" from="Control/DotLeft/ButtonLeft" to="." method="_on_ButtonLeft_button_down"]
+[connection signal="button_up" from="Control/DotLeft/ButtonLeft" to="." method="_on_ButtonLeft_button_up"]
+[connection signal="mouse_entered" from="Control/DotLeft/ButtonLeft" to="." method="_on_ButtonLeft_mouse_entered_exited"]
+[connection signal="mouse_exited" from="Control/DotLeft/ButtonLeft" to="." method="_on_ButtonLeft_mouse_entered_exited"]
+[connection signal="button_down" from="Control/DotRight/ButtonRight" to="." method="_on_ButtonRight_button_down"]
+[connection signal="button_up" from="Control/DotRight/ButtonRight" to="." method="_on_ButtonRight_button_up"]
+[connection signal="mouse_entered" from="Control/DotRight/ButtonRight" to="." method="_on_ButtonRight_mouse_entered_exited"]
+[connection signal="mouse_exited" from="Control/DotRight/ButtonRight" to="." method="_on_ButtonRight_mouse_entered_exited"]

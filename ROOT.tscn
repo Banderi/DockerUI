@@ -1,0 +1,332 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://ROOT.gd" type="Script" id=1]
+[ext_resource path="res://fonts/JetBrainsMono-Regular.tres" type="DynamicFont" id=2]
+[ext_resource path="res://fonts/JetBrainsMono-Regular16.tres" type="DynamicFont" id=3]
+[ext_resource path="res://Spinner.gd" type="Script" id=4]
+[ext_resource path="res://spinner64.png" type="Texture" id=5]
+[ext_resource path="res://ListElements/Generic.tscn" type="PackedScene" id=6]
+
+[sub_resource type="StyleBoxFlat" id=3]
+bg_color = Color( 0, 0, 0, 0.188235 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0, 0, 0, 0.290196 )
+border_width_left = 5
+border_color = Color( 0, 0, 0, 0.290196 )
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0, 0, 0, 0.203922 )
+
+[node name="ROOT" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+
+[node name="TabContainer" type="TabContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Dashboard" type="Tabs" parent="TabContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TabContainer/Dashboard"]
+anchor_right = 1.0
+margin_left = 4.0
+margin_right = -4.0
+margin_bottom = 376.0
+custom_constants/separation = 10
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="paths" type="Control" parent="TabContainer/Dashboard/HBoxContainer"]
+margin_right = 329.0
+margin_bottom = 376.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="TabContainer/Dashboard/HBoxContainer/paths"]
+anchor_right = 1.0
+margin_bottom = 20.0
+custom_fonts/font = ExtResource( 3 )
+text = "Source build paths"
+align = 1
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="Panel" parent="TabContainer/Dashboard/HBoxContainer/paths"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 25.0
+size_flags_horizontal = 3
+custom_styles/panel = SubResource( 3 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Dashboard/HBoxContainer/paths/Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+custom_constants/separation = 2
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Button" parent="TabContainer/Dashboard/HBoxContainer/paths/Panel/VBoxContainer" instance=ExtResource( 6 )]
+margin_right = 329.0
+has_connection_left = false
+
+[node name="Button2" parent="TabContainer/Dashboard/HBoxContainer/paths/Panel/VBoxContainer" instance=ExtResource( 6 )]
+margin_top = 25.0
+margin_right = 329.0
+margin_bottom = 48.0
+has_connection_left = false
+
+[node name="Button3" parent="TabContainer/Dashboard/HBoxContainer/paths/Panel/VBoxContainer" instance=ExtResource( 6 )]
+margin_top = 50.0
+margin_right = 329.0
+margin_bottom = 73.0
+has_connection_left = false
+
+[node name="images" type="Control" parent="TabContainer/Dashboard/HBoxContainer"]
+margin_left = 339.0
+margin_right = 668.0
+margin_bottom = 376.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="TabContainer/Dashboard/HBoxContainer/images"]
+anchor_right = 1.0
+margin_bottom = 20.0
+custom_fonts/font = ExtResource( 3 )
+text = "Docker images"
+align = 1
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="Panel" parent="TabContainer/Dashboard/HBoxContainer/images"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 25.0
+size_flags_horizontal = 3
+custom_styles/panel = SubResource( 3 )
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Dashboard/HBoxContainer/images/Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+custom_constants/separation = 2
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Button4" parent="TabContainer/Dashboard/HBoxContainer/images/Panel/VBoxContainer" instance=ExtResource( 6 )]
+margin_right = 329.0
+
+[node name="Button5" parent="TabContainer/Dashboard/HBoxContainer/images/Panel/VBoxContainer" instance=ExtResource( 6 )]
+margin_top = 25.0
+margin_right = 329.0
+margin_bottom = 48.0
+
+[node name="containers" type="Control" parent="TabContainer/Dashboard/HBoxContainer"]
+margin_left = 678.0
+margin_right = 1008.0
+margin_bottom = 376.0
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="TabContainer/Dashboard/HBoxContainer/containers"]
+anchor_right = 1.0
+margin_bottom = 20.0
+custom_fonts/font = ExtResource( 3 )
+text = "Docker containers"
+align = 1
+__meta__ = {
+"_edit_lock_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Panel" type="Panel" parent="TabContainer/Dashboard/HBoxContainer/containers"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 25.0
+size_flags_horizontal = 3
+custom_styles/panel = SubResource( 3 )
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TabContainer/Dashboard/HBoxContainer/containers/Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+size_flags_horizontal = 3
+custom_constants/separation = 2
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="Button6" parent="TabContainer/Dashboard/HBoxContainer/containers/Panel/VBoxContainer" instance=ExtResource( 6 )]
+has_connection_right = false
+
+[node name="Button7" parent="TabContainer/Dashboard/HBoxContainer/containers/Panel/VBoxContainer" instance=ExtResource( 6 )]
+margin_top = 25.0
+margin_bottom = 48.0
+has_connection_right = false
+
+[node name="Button8" parent="TabContainer/Dashboard/HBoxContainer/containers/Panel/VBoxContainer" instance=ExtResource( 6 )]
+margin_top = 50.0
+margin_bottom = 73.0
+has_connection_right = false
+
+[node name="PATH" type="Label" parent="TabContainer/Dashboard"]
+anchor_right = 1.0
+margin_left = 4.0
+margin_top = 382.497
+margin_right = -611.0
+margin_bottom = 419.497
+mouse_filter = 1
+mouse_default_cursor_shape = 2
+custom_styles/normal = SubResource( 2 )
+custom_fonts/font = ExtResource( 2 )
+text = "Test/Path/etc"
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="SelectPath" type="Button" parent="TabContainer/Dashboard/PATH"]
+visible = false
+margin_top = 38.0
+margin_right = 162.0
+margin_bottom = 74.0
+custom_fonts/font = ExtResource( 3 )
+text = "Select path"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RebuildImage" type="Button" parent="TabContainer/Dashboard/PATH"]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = 2.0
+margin_top = -18.0
+margin_right = 103.0
+margin_bottom = 18.0
+custom_fonts/font = ExtResource( 3 )
+text = "Rebuild"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Spinner" type="TextureRect" parent="TabContainer/Dashboard/PATH/RebuildImage"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -32.0
+margin_top = -32.0
+margin_right = 32.0
+margin_bottom = 32.0
+rect_scale = Vector2( 0.5, 0.5 )
+rect_pivot_offset = Vector2( 32, 32 )
+texture = ExtResource( 5 )
+stretch_mode = 6
+script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="OUTPUT" type="RichTextLabel" parent="TabContainer/Dashboard"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 517.0
+margin_top = 381.0
+margin_right = -4.0
+margin_bottom = -3.0
+rect_clip_content = false
+custom_styles/normal = SubResource( 1 )
+custom_fonts/normal_font = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Raw" type="Tabs" parent="TabContainer"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+
+[node name="IMAGES" type="RichTextLabel" parent="TabContainer/Raw"]
+anchor_right = 1.0
+margin_bottom = 151.0
+custom_styles/normal = SubResource( 1 )
+custom_fonts/normal_font = ExtResource( 2 )
+scroll_active = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CONTAINERS" type="RichTextLabel" parent="TabContainer/Raw"]
+anchor_right = 1.0
+margin_top = 159.0
+margin_bottom = 311.0
+rect_clip_content = false
+custom_styles/normal = SubResource( 1 )
+custom_fonts/normal_font = ExtResource( 2 )
+scroll_active = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="FileDialog" type="FileDialog" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -205.0
+margin_top = -236.0
+margin_right = 206.0
+margin_bottom = 257.0
+window_title = "Open a Directory"
+mode = 2
+access = 2
+current_dir = "/"
+current_path = "/"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
+[connection signal="gui_input" from="TabContainer/Dashboard/PATH" to="." method="_on_PATH_gui_input"]
+[connection signal="pressed" from="TabContainer/Dashboard/PATH/SelectPath" to="." method="_on_SelectPath_pressed"]
+[connection signal="pressed" from="TabContainer/Dashboard/PATH/RebuildImage" to="." method="_on_RebuildImage_pressed"]
+[connection signal="dir_selected" from="FileDialog" to="." method="_on_FileDialog_dir_selected"]
