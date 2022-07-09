@@ -1,4 +1,3 @@
-tool
 extends Button
 
 export(bool) var has_connection_left = true setget setDotLeft
@@ -11,6 +10,7 @@ export(int) var debug_sibling_index_right = -1
 var sibling_left = null
 var sibling_right = null
 
+# setgets for "tool" code
 func setDotLeft(v):
 	has_connection_left = v
 	$Control/DotLeft.visible = has_connection_left
@@ -49,11 +49,11 @@ func disconnect_sibling(direction):
 
 func refresh_hover():
 	if has_connection_left:
-		$Control/DotLeft.visible = highlight || selected
-#		$Control/DotLeft/MeshInstance2D.visible = !(sibling_left == null)
+		$Control/DotLeft.visible = highlight || selected || \
+		(sibling_left != null && (sibling_left.selected || (!sibling_left.editing_right && sibling_left.highlight)))
 	if has_connection_right:
-		$Control/DotRight.visible = highlight || selected
-#		$Control/DotRight/MeshInstance2D.visible = !(sibling_right == null)
+		$Control/DotRight.visible = highlight || selected ||\
+		(sibling_right != null && (sibling_right.selected || (!sibling_right.editing_left && sibling_right.highlight)))
 	if a_sibling_is_pressed != null && !highlight:
 		modulate.a = 0.5
 	else:
@@ -73,23 +73,31 @@ func _on_Control_mouse_exited():
 	refresh_hover()
 
 var selected = false
+func select(b):
+	b.pressed = true
+	b.selected = true
+func unselect(b):
+	b.pressed = false
+	b.selected = false
+
 func _on_Button_pressed():
-	for b in vlist_self.get_children():
-		b.pressed = false
-		b.selected = false
-	self.pressed = true # the above fires *after* Godot has set the press, so we need to do it again >:/
-	self.selected = true
+	for ctrl in hbox.get_children():
+		var vlist = ctrl.get_node("Panel/VBoxContainer")
+		for b in vlist.get_children():
+			unselect(b)
+	# the above fires *after* Godot has set the press, so we need to do it again >:/
+	select(self)
 
 func _ready():
 	refresh_hover()
 
 func _draw():
 	# draw splines
-	if a_sibling_is_pressed == null && highlight:
+	if a_sibling_is_pressed == null && (highlight || selected):
 		if has_connection_left && (editing_left || sibling_left != null):
-			draw_polyline($PathLeft.curve.get_baked_points(), Color(1,1,1,1), 2.0)
+			Global.splinecanvas.add_spline([$PathLeft.curve, self, selected, editing_left])
 		if has_connection_right && (editing_right || sibling_right != null):
-			draw_polyline($PathRight.curve.get_baked_points(), Color(1,1,1,1), 2.0)
+			Global.splinecanvas.add_spline([$PathRight.curve, self, selected, editing_right])
 
 var editing_left = false
 var editing_right = false
@@ -166,6 +174,7 @@ func refresh_splines_to_connected():
 		set_conn_point("right", sibling_right)
 
 func _on_ButtonLeft_button_down():
+	_on_Button_pressed()
 	editing_left = true
 func _on_ButtonLeft_button_up():
 	if !editing_left:
@@ -176,6 +185,7 @@ func _on_ButtonLeft_button_up():
 		hovering_sibling.connect_sibling("right", self)
 	refresh_splines_to_connected()
 func _on_ButtonRight_button_down():
+	_on_Button_pressed()
 	editing_right = true
 func _on_ButtonRight_button_up():
 	if !editing_right:
@@ -185,6 +195,7 @@ func _on_ButtonRight_button_up():
 		connect_sibling("right", hovering_sibling)
 		hovering_sibling.connect_sibling("left", self)
 	refresh_splines_to_connected()
+
 func _input(event):
 	if editing_left || editing_right:
 		if event is InputEventMouseButton && event.button_index == BUTTON_RIGHT && !event.is_pressed():

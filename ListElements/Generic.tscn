@@ -3,19 +3,19 @@
 [ext_resource path="res://fonts/JetBrainsMono-Regular.tres" type="DynamicFont" id=1]
 [ext_resource path="res://ListElements/Generic.gd" type="Script" id=2]
 
-[sub_resource type="Curve2D" id=3]
+[sub_resource type="Curve2D" id=1]
 resource_local_to_scene = true
 _data = {
 "points": PoolVector2Array( 14.0535, 0.0891237, -14.0535, -0.0891237, 2.05062, 11.9292, 14.0482, 0.109046, -14.0482, -0.109046, -13.8564, 39.1416 )
 }
 
-[sub_resource type="Curve2D" id=4]
+[sub_resource type="Curve2D" id=2]
 resource_local_to_scene = true
 _data = {
-"points": PoolVector2Array( 14.0535, 0.0891237, -14.0535, -0.0891237, 341.199, 40.4525, 14.0482, 0.109046, -14.0482, -0.109046, 327.183, 11.9203 )
+"points": PoolVector2Array( 14.0535, 0.0891237, -14.0535, -0.0891237, 341.199, 40.4525, 14.0482, 0.109046, -14.0482, -0.109046, 326.133, 11.8829 )
 }
 
-[sub_resource type="StyleBoxFlat" id=2]
+[sub_resource type="StyleBoxFlat" id=3]
 bg_color = Color( 0.6, 0.6, 0.6, 0 )
 border_width_left = 1
 border_width_top = 1
@@ -23,11 +23,12 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color( 1, 1, 1, 0.47451 )
 
-[sub_resource type="SphereMesh" id=1]
+[sub_resource type="SphereMesh" id=4]
 
 [node name="Button" type="Button"]
 margin_right = 330.0
 margin_bottom = 23.0
+focus_mode = 0
 custom_fonts/font = ExtResource( 1 )
 toggle_mode = true
 text = "Test/Path/etc"
@@ -38,13 +39,17 @@ __meta__ = {
 }
 
 [node name="PathLeft" type="Path2D" parent="."]
-curve = SubResource( 3 )
+z_index = 999
+z_as_relative = false
+curve = SubResource( 1 )
 __meta__ = {
 "_edit_lock_": true
 }
 
 [node name="PathRight" type="Path2D" parent="."]
-curve = SubResource( 4 )
+z_index = 999
+z_as_relative = false
+curve = SubResource( 2 )
 __meta__ = {
 "_edit_lock_": true
 }
@@ -78,7 +83,7 @@ margin_bottom = 4.0
 rect_rotation = 45.0
 rect_pivot_offset = Vector2( 4, 4 )
 mouse_filter = 1
-custom_styles/panel = SubResource( 2 )
+custom_styles/panel = SubResource( 3 )
 __meta__ = {
 "_edit_lock_": true,
 "_edit_use_anchors_": false
@@ -88,7 +93,7 @@ __meta__ = {
 visible = false
 position = Vector2( 0, -0.248031 )
 scale = Vector2( 2, 2 )
-mesh = SubResource( 1 )
+mesh = SubResource( 4 )
 __meta__ = {
 "_edit_lock_": true
 }
@@ -129,7 +134,7 @@ margin_bottom = 4.0
 rect_rotation = 45.0
 rect_pivot_offset = Vector2( 4, 4 )
 mouse_filter = 1
-custom_styles/panel = SubResource( 2 )
+custom_styles/panel = SubResource( 3 )
 __meta__ = {
 "_edit_lock_": true,
 "_edit_use_anchors_": false
@@ -139,7 +144,7 @@ __meta__ = {
 visible = false
 position = Vector2( 0, -0.248031 )
 scale = Vector2( 2, 2 )
-mesh = SubResource( 1 )
+mesh = SubResource( 4 )
 __meta__ = {
 "_edit_lock_": true
 }

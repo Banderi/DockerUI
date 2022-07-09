@@ -110,6 +110,7 @@ func refresh():
 func _ready():
 	refresh()
 	imgPATH.text = $FileDialog.current_path
+	Global.splinecanvas = $TabContainer/Dashboard/CanvasLayer
 
 func _on_Timer_timeout():
 	refresh()
