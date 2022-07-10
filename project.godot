@@ -8,6 +8,22 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "Button",
+"class": "AsyncButton",
+"language": "GDScript",
+"path": "res://Async/AsyncButton.gd"
+}, {
+"base": "Button",
+"class": "ElemGeneric",
+"language": "GDScript",
+"path": "res://ListElements/Generic.gd"
+} ]
+_global_script_class_icons={
+"AsyncButton": "",
+"ElemGeneric": ""
+}
+
 [application]
 
 config/name="DockerUI"
@@ -18,6 +34,7 @@ config/icon="res://icon.png"
 
 Shell="*res://Shell.gd"
 Global="*res://Global.gd"
+Console="*res://Console.gd"
 
 [physics]
 

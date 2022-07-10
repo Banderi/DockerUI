@@ -12,24 +12,33 @@ var DATA = {
 	"images":[],
 	"containers":[]
 }
-
-# threaded semaphore
-var ready = 3
-
 func record_image(obj):
 	DATA.images.push_back(obj);
 func record_container(obj):
 	DATA.containers.push_back(obj);
 
+onready var vlist_IMAGES = $TabContainer/Dashboard/simpler/images/Panel/VBoxContainer
+onready var vlist_CONTAINERS = $TabContainer/Dashboard/simpler/containers/Panel/VBoxContainer
+onready var BTN_IMAGE = load("res://ListElements/Image.tscn")
+onready var BTN_CONTAINER = load("res://ListElements/Container.tscn")
 func unpopulate():
-	pass
+	for b in vlist_IMAGES.get_children():
+		b.free()
+	for b in vlist_CONTAINERS.get_children():
+		b.free()
 func populate():
 	unpopulate()
-	pass
+	for image in DATA.images:
+		var node = BTN_IMAGE.instance()
+		node.text = image.repository + ":" + image.tag
+		vlist_IMAGES.add_child(node)
+	for container in DATA.containers:
+		var node = BTN_CONTAINER.instance()
+		node.text = container.names
+		vlist_CONTAINERS.add_child(node)
 
 onready var t_IMAGES = $TabContainer/Raw/IMAGES
 onready var t_CONTAINERS = $TabContainer/Raw/CONTAINERS
-
 func substr(string, ref, index):
 	if index >= ref.size():
 		return ""
@@ -44,6 +53,8 @@ func _callb_images(output):
 	var ref = []
 	output = output.split("\n")
 	for line in output:
+		if line == "":
+			continue
 		t_IMAGES.text += line
 		t_IMAGES.text += "\n"
 		if l > 0: # skip first line
@@ -61,7 +72,7 @@ func _callb_images(output):
 			ref.push_back(line.find("CREATED"))
 			ref.push_back(line.find("SIZE"))
 		l += 1
-	ready = enable_bit(ready, 0)
+	refresh_pending_cmd -= 1
 func _callb_containters(output):
 	t_CONTAINERS.text = ""
 	DATA.containers = []
@@ -70,6 +81,8 @@ func _callb_containters(output):
 	var ref = []
 	output = output.split("\n")
 	for line in output:
+		if line == "":
+			continue
 		t_CONTAINERS.text += line
 		t_CONTAINERS.text += "\n"
 		if l > 0: # skip first line
@@ -91,43 +104,85 @@ func _callb_containters(output):
 			ref.push_back(line.find("PORTS"))
 			ref.push_back(line.find("NAMES"))
 		l += 1
-	ready = enable_bit(ready, 1)
+	refresh_pending_cmd -= 1
 
-func refresh():
-	if is_bit_enabled(ready, 0):
-		ready = disable_bit(ready, 0)
-		Shell.run("docker image list", self, "_callb_images")
+var waiting_for_refresh = false
+var refresh_pending_cmd = 0
+func refresh(manual = false):
+	Shell.run("docker image list", self, "_callb_images", manual, manual)
+	Shell.run("docker container list", self, "_callb_containters", manual, manual)
+	refresh_pending_cmd = 2
+
+func _on_Refresh_action_pressed():
+	refresh(true)
+func _on_Timer_timeout():
+	refresh()
+	pass
+func _process(delta):
+	if refresh_pending_cmd == 0:
+		if waiting_for_refresh:
+			$TabContainer/Dashboard/Refresh.done(null)
+			waiting_for_refresh = false
+			populate()
 	else:
-		print("Waiting...(0)")
-	if is_bit_enabled(ready, 1):
-		ready = disable_bit(ready, 1)
-		Shell.run("docker container list", self, "_callb_containters")
-	else:
-		print("Waiting...(1)")
+		waiting_for_refresh = true
+
+
 
 ###
 
+var docker_version = null
 func _ready():
+	unpopulate()
+
+	# init console
+	Console.node = $TabContainer/Dashboard/OUTPUT
+	Console.clear()
+	Console.out("*** CONSOLE IS ALIVE ***", Color(0.5,1,1,1))
+
+	# get docker version
+	var ver = Shell.run_sync("docker version --format {{.Server.Version}}", false)
+#	var ver = Shell.run_sync("docker version --format '{{json .}}'", false)
+	if ver != []:
+		docker_version = ver[0]
+#		docker_version = JSON.parse(ver[0]).get_result()
+		Console.out('Docker server version: ' + docker_version, Color(0.5,1,1,0.5), "")
+	else:
+		Console.out('ERROR: Docker enumeration failed!', Color(1,0,0,1), "")
+		return
+
+	$TabContainer/Dashboard/DockerUI/DockerVersion.text = "Docker Version: " + str(docker_version)
 	refresh()
+#	Console.out("Daemon (refresh) started", Color(0.5,1,1,0.5))
 	imgPATH.text = $FileDialog.current_path
 	Global.splinecanvas = $TabContainer/Dashboard/CanvasLayer
 
-func _on_Timer_timeout():
-	refresh()
-
 ###
 
+onready var imgPATH = $TabContainer/Dashboard/PATH
 func _on_SelectPath_pressed():
 	$FileDialog.popup()
-
-onready var imgPATH = $TabContainer/Dashboard/PATH
-
 func _on_FileDialog_dir_selected(dir):
 	imgPATH.text = dir
-
 func _on_PATH_gui_input(event):
 	if event is InputEventMouseButton && event.is_pressed() && event.button_index == BUTTON_LEFT:
 		$FileDialog.popup()
 
-func _on_RebuildImage_pressed():
+func _on_Unselect_pressed():
+	# we'll do both at once, cuz it's easier, it works, and I'm lazy!
+	for b in vlist_IMAGES.get_children():
+		b.unselect()
+	for b in vlist_CONTAINERS.get_children():
+		b.unselect()
+
+func _on_RebuildImage_action_pressed():
 	pass # Replace with function body.
+
+
+func _on_CMD_text_changed(new_text):
+	$TabContainer/Dashboard/CMD/AsyncShellBtn.cmd = new_text
+func _on_CMD_text_entered(new_text):
+	$TabContainer/Dashboard/CMD/AsyncShellBtn.cmd = new_text
+	$TabContainer/Dashboard/CMD/AsyncShellBtn._on_AsyncShellBtn_pressed()
+func _on_ClearConsole_pressed():
+	Console.clear()

@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://fonts/JetBrainsMono-Regular.tres" type="DynamicFont" id=1]
-[ext_resource path="res://ListElements/Generic.gd" type="Script" id=2]
+[ext_resource path="res://ListElements/Spline.gd" type="Script" id=2]
 
 [sub_resource type="Curve2D" id=1]
 resource_local_to_scene = true
@@ -39,6 +39,7 @@ __meta__ = {
 }
 
 [node name="PathLeft" type="Path2D" parent="."]
+visible = false
 z_index = 999
 z_as_relative = false
 curve = SubResource( 1 )
@@ -47,6 +48,7 @@ __meta__ = {
 }
 
 [node name="PathRight" type="Path2D" parent="."]
+visible = false
 z_index = 999
 z_as_relative = false
 curve = SubResource( 2 )
